@@ -2,6 +2,8 @@
 
 A Python package providing command-line tools for [Gaussian 16](https://gaussian.com/) quantum chemistry workflows. Covers the full transition-state search pipeline: geometry conversion, relaxed scan analysis, TS optimisation, IRC path following, endpoint optimisation, and batch energy analysis.
 
+This project is an independent, third-party tool and is not affiliated with, authorized by, or endorsed by Gaussian, Inc.
+
 ## Installation
 
 ```bash
