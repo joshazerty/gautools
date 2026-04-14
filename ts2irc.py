@@ -211,28 +211,21 @@ def parse_log_fallback(filepath):
 
 # --- 5. Output Generation ---
 def process_route_for_irc(route_line):
-    new_route = route_line
-    # Remove Opt, Freq, QST keywords
-    new_route = re.sub(r'opt(=|\s+|\s*\().*?\)', '', new_route, flags=re.IGNORECASE) 
-    new_route = re.sub(r'opt(=|\s+)\w+', '', new_route, flags=re.IGNORECASE)
-    new_route = re.sub(r'\bopt\b', '', new_route, flags=re.IGNORECASE)
-    new_route = re.sub(r'freq(=|\s+|\s*\().*?\)', '', new_route, flags=re.IGNORECASE)
-    new_route = re.sub(r'freq(=|\s+)\w+', '', new_route, flags=re.IGNORECASE)
-    new_route = re.sub(r'\bfreq\b', '', new_route, flags=re.IGNORECASE)
-    new_route = re.sub(r'qst\d', '', new_route, flags=re.IGNORECASE)
-
-    new_route = " ".join(new_route.split())
-    new_route = new_route.replace("SCF=( ", "SCF=(")
-    
-    irc_cmd = "IRC=(CalcFC,MaxPoints=30,StepSize=10)"
-    return f"{new_route} {irc_cmd}"
+    r = route_line
+    # Remove Opt, Freq, QST keywords (with or without options)
+    for kw in (r'Opt', r'Freq', r'QST\d'):
+        r = re.sub(rf'{kw}\s*=\s*\([^)]*\)', '', r, flags=re.IGNORECASE)
+        r = re.sub(rf'{kw}\s*=\s*\S+',       '', r, flags=re.IGNORECASE)
+        r = re.sub(rf'\b{kw}\b',             '', r, flags=re.IGNORECASE)
+    r = " ".join(r.split())
+    return f"{r} IRC=(CalcFC,MaxPoints=30,StepSize=10)"
 
 def get_irc_filename(filepath):
     base = os.path.splitext(os.path.basename(filepath))[0]
     new_base = base
     while True:
         prev_base = new_base
-        new_base = re.sub(r'_(qst[23]|opt|ts|guess)$', '', new_base, flags=re.IGNORECASE)
+        new_base = re.sub(r'_(qst[23]|opt|ts|freq|guess)$', '', new_base, flags=re.IGNORECASE)
         if new_base == prev_base: break
     return f"{new_base}_irc.inp"
 

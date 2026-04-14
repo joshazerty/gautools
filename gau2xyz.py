@@ -130,34 +130,35 @@ def write_xyz(atoms, output_path, source_file):
 
 def main():
     if len(sys.argv) < 2:
-        print(f"{WARN} Usage: python log2xyz.py <gaussian_output_file>")
+        print(f"{WARN} Usage: gau2xyz.py <gaussian_output_file> [file2.log ...]")
         sys.exit(1)
 
-    input_file = sys.argv[1]
-    output_file = get_xyz_filename(input_file)
+    for input_file in sys.argv[1:]:
+        output_file = get_xyz_filename(input_file)
 
-    # --- Processing ---
-    terminated_correctly, atoms = extract_and_convert(input_file)
+        # --- Processing ---
+        terminated_correctly, atoms = extract_and_convert(input_file)
 
-    # --- Reporting Termination Status ---
-    if terminated_correctly:
-        print(f"{TICK} Gaussian Status: {Colors.OKGREEN}Normal termination{Colors.ENDC}")
-    else:
-        print(f"{CROSS} Gaussian Status: {Colors.FAIL}Error / Incomplete{Colors.ENDC}")
-        print(f"    {Colors.WARNING}(Extracting last available geometry regardless of error){Colors.ENDC}")
-
-    # --- Reporting Extraction ---
-    if atoms:
-        print(f"{TICK} Geometry Extraction: {len(atoms)} atoms found")
-        
-        # --- Writing Output ---
-        success = write_xyz(atoms, output_file, input_file)
-        if success:
-            print(f"{TICK} Output Saved: {Colors.OKBLUE}{output_file}{Colors.ENDC}")
+        # --- Reporting Termination Status ---
+        if terminated_correctly:
+            print(f"{TICK} Gaussian Status: {Colors.OKGREEN}Normal termination{Colors.ENDC}")
         else:
-            print(f"{CROSS} Output Failed.")
-    else:
-        print(f"{CROSS} Geometry Extraction: {Colors.FAIL}No geometry found in file{Colors.ENDC}")
+            print(f"{CROSS} Gaussian Status: {Colors.FAIL}Error / Incomplete{Colors.ENDC}")
+            print(f"    {Colors.WARNING}(Extracting last available geometry regardless of error){Colors.ENDC}")
+
+        # --- Reporting Extraction ---
+        if atoms:
+            print(f"{TICK} Geometry Extraction: {len(atoms)} atoms found")
+
+            # --- Writing Output ---
+            success = write_xyz(atoms, output_file, input_file)
+            if success:
+                print(f"{TICK} Output Saved: {Colors.OKBLUE}{output_file}{Colors.ENDC}")
+            else:
+                print(f"{CROSS} Output Failed.")
+        else:
+            print(f"{CROSS} Geometry Extraction: {Colors.FAIL}No geometry found in file{Colors.ENDC}")
+        print()
 
 if __name__ == "__main__":
     main()
