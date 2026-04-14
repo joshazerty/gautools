@@ -1,0 +1,33 @@
+# Cluster/NEB scripts (excluded from this repo)
+subgau16
+cluster_status.sh
+run_neb.py
+run_neb_parallel.py
+postprocess_neb.py
+
+# Gaussian input/output files
+*.log
+*.out
+*.chk
+*.fchk
+*.rwf
+*.int
+*.d2e
+*.skr
+*.job
+
+# XYZ and generated files
+*.xyz
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Editor/OS
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
