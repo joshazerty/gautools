@@ -31,3 +31,4 @@ __pycache__/
 *.swp
 *~
 .DS_Store
+src/gautools.egg-info/

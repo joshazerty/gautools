@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=68", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gautools"
+dynamic = ["version"]
+description = "Command-line tools for Gaussian 16 quantum chemistry workflows"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Joshua Sims", email = "joshuamarksims@gmail.com"},
+]
+keywords = ["computational chemistry", "gaussian", "quantum chemistry", "HPC"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+dependencies = [
+    "click>=8.0",
+]
+
+[project.optional-dependencies]
+scan = [
+    "cclib>=1.8",
+    "numpy>=1.24",
+    "matplotlib>=3.6",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+    "cclib>=1.8",
+    "numpy>=1.24",
+    "matplotlib>=3.6",
+]
+
+[project.scripts]
+gau2xyz    = "gautools.commands.gau2xyz:main"
+ts2irc     = "gautools.commands.ts2irc:main"
+irc2opt    = "gautools.commands.irc2opt:main"
+scan2qst2  = "gautools.commands.scan2qst2:main"
+xyz2inp    = "gautools.commands.xyz2inp:main"
+gau-status = "gautools.commands.gau_status:main"
+gau-energy = "gautools.commands.gau_energy:main"
+gautools   = "gautools.commands.cli:cli"
+
+[project.urls]
+Homepage   = "https://github.com/joshazerty/gautools"
+Repository = "https://github.com/joshazerty/gautools"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+# version is derived from git tags: git tag v0.1.0 && pip install -e .
+fallback_version = "0.1.0"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
